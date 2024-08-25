@@ -5,14 +5,14 @@ class Screen3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Screen 3'),
+        title: Text('Screen 1'),
       ),
       body: Stack(
         children: [
           Center(
-            child: Text('This is Screen 3'),
+            child: Text('This is Screen 1'),
           ),
-          Align(
+         /* Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
@@ -31,7 +31,7 @@ class Screen3 extends StatelessWidget {
                 child: Text('이전 화면'),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

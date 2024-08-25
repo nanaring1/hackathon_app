@@ -12,7 +12,7 @@ class Screen2 extends StatelessWidget {
           Center(
             child: Text('This is Screen 2'),
           ),
-          Align(
+         /* Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
@@ -31,7 +31,7 @@ class Screen2 extends StatelessWidget {
                 child: Text('이전 화면'),
               ),
             ),
-          ),
+          )*/
         ],
       ),
     );
