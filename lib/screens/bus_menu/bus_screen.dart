@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'bus_arrival_screen.dart'; // 페이지 이동을 위해 bus_arrival_screen.dart 임포트
+import 'package:hackathon_app/services/api_service.dart'; // API 서비스를 임포트
 
 class Screen1 extends StatefulWidget {
   @override
@@ -9,11 +10,14 @@ class Screen1 extends StatefulWidget {
 
 class _Screen1State extends State<Screen1> {
   String _currentPosition = "위치를 가져오는 중...";
+  List<String> _destinations = []; // 장소 데이터 리스트
+  final ApiService _apiService = ApiService(); // API 서비스 인스턴스
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    _fetchDestinations(); // 장소 데이터 가져오기
   }
 
   Future<void> _getCurrentLocation() async {
@@ -41,6 +45,20 @@ class _Screen1State extends State<Screen1> {
     }
   }
 
+  Future<void> _fetchDestinations() async {
+    try {
+      List<String> destinations = await _apiService.getDestinationPlaces();
+      setState(() {
+        _destinations = destinations;
+      });
+    } catch (e) {
+      print('Failed to fetch destinations: $e');
+      setState(() {
+        _destinations = []; // 실패 시 빈 리스트 설정
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,34 +79,16 @@ class _Screen1State extends State<Screen1> {
             ),
           ),
           Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 왼쪽 긴 줄
-                Container(
-                  width: 8,
-                  color: Colors.brown,
-                  margin: EdgeInsets.only(left: 20), // 버튼과 겹치는 정도 조절
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          color: Colors.brown,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 10),
-                // 도착지 버튼
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: _buildDestinationButton(
-                        context, Icons.directions_bus, "도착지 1"),
-                  ),
-                ),
-              ],
+            child: ListView.builder(
+              padding: const EdgeInsets.only(top: 10.0),
+              itemCount: _destinations.length,
+              itemBuilder: (context, index) {
+                return _buildDestinationButton(
+                  context,
+                  Icons.directions_bus,
+                  _destinations[index],
+                );
+              },
             ),
           ),
         ],
@@ -99,7 +99,7 @@ class _Screen1State extends State<Screen1> {
   Widget _buildDestinationButton(
       BuildContext context, IconData icon, String destination) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: ElevatedButton(
         onPressed: () {
           // 도착지 버튼이 눌렸을 때 BusArrivalScreen으로 이동
@@ -130,13 +130,13 @@ class _Screen1State extends State<Screen1> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(
-                  Icons.home,
+                  icon,
                   size: 80,
                   color: Colors.white, // 아이콘 색상
                 ),
                 SizedBox(height: 10),
                 Text(
-                  '도착지',
+                  destination, // 버튼 텍스트를 장소 데이터로 설정
                   style: const TextStyle(
                     fontSize: 50,
                     fontWeight: FontWeight.bold,

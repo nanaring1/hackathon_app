@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BusArrivalScreen extends StatelessWidget {
-  const BusArrivalScreen({super.key});
+  final String busNumber; // 버스 번호
+  final String minutesRemaining; // 남은 시간
+
+  const BusArrivalScreen({
+    super.key,
+    this.busNumber = "123", // 기본값을 설정
+    this.minutesRemaining = "10", // 기본값을 설정
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +47,26 @@ class BusArrivalScreen extends StatelessWidget {
             left: MediaQuery.of(context).size.width * 0.5 - 150, // 텍스트 중앙 정렬
             child: Container(
               color: Colors.transparent,
-              child: Text(
-                '버스 도착까지 15분',
-                style: const TextStyle(
-                  fontSize: 40, // 글자 크기 증가
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white, // 글자 색상 하얀색
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '버스 $busNumber 번 도착',
+                    style: const TextStyle(
+                      fontSize: 40, // 글자 크기 증가
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white, // 글자 색상 하얀색
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    '$minutesRemaining 분 남았습니다',
+                    style: const TextStyle(
+                      fontSize: 30, // 글자 크기
+                      color: Colors.white, // 글자 색상 하얀색
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -65,12 +85,10 @@ class _InvertedCurvePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final Path path = Path()
-    // 도형의 시작점을 더 위쪽으로 이동
       ..lineTo(0, size.height * 0.1)
-    // 굴곡을 더 강조하고 위로 이동
       ..quadraticBezierTo(size.width * 0.5, -size.height * 0.3, size.width, size.height * 0.1)
-      ..lineTo(size.width, size.height) // 하단으로 이동
-      ..lineTo(0, size.height) // 왼쪽으로 이동
+      ..lineTo(size.width, size.height)
+      ..lineTo(0, size.height)
       ..close(); // 경로 닫기
 
     canvas.drawPath(path, paint);
@@ -79,6 +97,3 @@ class _InvertedCurvePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
-
-
