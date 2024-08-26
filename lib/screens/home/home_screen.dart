@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon_app/screens/bus_menu/bus_screen.dart';
-import 'package:hackathon_app/screens/taxi_menu/taxi_screen.dart';
 import 'package:hackathon_app/screens/call_menu/call_screen.dart';
 import 'package:hackathon_app/screens/emergen_menu/emergen_screen.dart';
 import 'package:hackathon_app/services/location_service.dart';
